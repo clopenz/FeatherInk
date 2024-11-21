@@ -24,29 +24,66 @@
 
 		<div class="main-section">
 			<div class="note-list-wrapper">
-				<div class="note-list-header">Notes</div>
+				<div class="note-list-header">
+					<div class="search-wrapper">
+						<div class="search-bar">
+							<i class="fa-solid fa-magnifying-glass"></i>
+							<input type="text" placeholder="Search" />
+						</div>
+					</div>
+				</div>
 				<div class="note-list">
 					<ul class="note-list-items">
-						<li class="note-list-item">Note 1</li>
-						<li class="note-list-item">Note 2</li>
-						<li class="note-list-item">Note 3</li>
-						<li class="note-list-item">Note 4</li>
-						<li class="note-list-item">Note 5</li>
-						<li class="note-list-item">Note 6</li>
-						<li class="note-list-item">Note 7</li>
-						<li class="note-list-item">Note 8</li>
-						<li class="note-list-item">Note 9</li>
-						<li class="note-list-item">Note 10</li>
+						<li class="note-list-item">
+							<div class="note-list-title">Important Note</div>
+							<div class="note-list-subtitle">Hello there</div>
+							<div class="note-list-date">Nov 20, 2024</div>
+						</li>
+						<li class="note-list-item">
+							<div class="note-list-title">Grocery List</div>
+							<div class="note-list-subtitle">Shop on Monday</div>
+							<div class="note-list-date">Nov 20, 2024</div>
+						</li>
+						<li class="note-list-item">
+							<div class="note-list-title">Workout List</div>
+							<div class="note-list-subtitle">3x5 Workout</div>
+							<div class="note-list-date">Nov 19 2024</div>
+						</li>
 					</ul>
 				</div>
 			</div>
 
 			<div class="content-wrapper">
-				<div class="tabs">Tabs</div>
+				<div class="tabs">
+					<ul class="tabs-items">
+						<li class="tabs-item active">
+							Grocery List
+							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
+						</li>
+						<li class="tabs-item">
+							Workout List
+							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
+						</li>
+						<li class="tabs-item">
+							Important Note
+							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
+						</li>
+					</ul>
+				</div>
 
 				<div class="note-content-wrapper">
-					<div class="note-title">Note Title</div>
-					<div class="note-content">Content</div>
+					<div class="note-title">Grocery List</div>
+					<div class="note-subtitle">Shop on Monday</div>
+					<div class="note-content">
+						<ul>
+							<li>Cat food</li>
+							<li>Cereal</li>
+							<li>Tomatoes</li>
+							<li>Oranges</li>
+							<li>Yogurt</li>
+							<li>Eggs</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
