@@ -10,14 +10,31 @@
 			integrity="sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ=="
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer" />
+		<script src="js/script.js" defer></script>
+		<script src="js/modalToggle.js" defer></script>
 		<title>FeatherInk - Notes</title>
 	</head>
 	<body>
 		<header class="header">
 			<div class="title">FeatherInk</div>
 			<div class="header-menu">
-				<ul class="menu-items">
-					<li>Account</li>
+				<p>Account</p>
+
+				<img src="images/Menu Toggle.png" alt="" class="menu-toggle-open" />
+			</div>
+
+			<div class="header-modal hidden">
+				<ul class="header-modal-content">
+					<li class="header-modal-item account">
+						<p>Account</p>
+						<img
+							src="images/Menu Toggle.png"
+							alt=""
+							class="menu-toggle-close" />
+					</li>
+					<li class="header-modal-item">Dark Mode</li>
+					<li class="header-modal-item">Download Notes</li>
+					<li class="header-modal-item">Logout</li>
 				</ul>
 			</div>
 		</header>
@@ -72,18 +89,13 @@
 				</div>
 
 				<div class="note-content-wrapper">
-					<div class="note-title">Grocery List</div>
-					<div class="note-subtitle">Shop on Monday</div>
-					<div class="note-content">
-						<ul>
-							<li>Cat food</li>
-							<li>Cereal</li>
-							<li>Tomatoes</li>
-							<li>Oranges</li>
-							<li>Yogurt</li>
-							<li>Eggs</li>
-						</ul>
-					</div>
+					<input class="note-title" placeholder="Untitled" />
+					<input
+						class="note-subtitle"
+						placeholder="Subtitle (first line will be default)" />
+					<textarea
+						class="note-content"
+						placeholder="Take a note..."></textarea>
 				</div>
 			</div>
 		</div>
