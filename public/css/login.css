@@ -1,0 +1,146 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* General */
+html,
+body {
+	height: 100%;
+	overflow-y: hidden;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+li {
+	list-style: none;
+}
+
+/* Header */
+.header {
+	display: flex;
+	justify-content: space-between;
+	background: linear-gradient(135deg, #fff09a, #ffd6a5);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	padding: 8px 20px 8px 20px;
+}
+
+.logo {
+	img {
+		width: 150px;
+	}
+}
+
+/* Main Section */
+
+.main-section {
+	flex: 1 1 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(135deg, #fff09a, #ffd6a5);
+}
+
+/* Login Container */
+.login-container {
+	position: relative;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	width: 400px;
+	height: 400px;
+	text-align: center;
+}
+
+h2 {
+	margin-bottom: 20px;
+}
+
+.form-group {
+	margin-bottom: 15px;
+	text-align: left;
+}
+
+label {
+	display: block;
+	font-size: 14px;
+	color: #333;
+}
+
+input {
+	width: 100%;
+	padding: 8px;
+	margin-top: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+button {
+	width: 100%;
+	padding: 10px;
+	background: linear-gradient(135deg, #ffbc2d, #f5c386);
+	color: white;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+button:hover {
+	background: linear-gradient(135deg, #ffb30e, #ff9c22);
+}
+
+.signup-link {
+	margin-top: 15px;
+}
+
+.signup-link a {
+	text-decoration: none;
+	color: #007bff;
+}
+
+.signup-link a:hover {
+	text-decoration: underline;
+}
+
+.back-btn {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	color: #007bff;
+	text-decoration: none;
+}
+
+.back-btn:hover {
+	text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+	background: linear-gradient(135deg, #f8e681, #f5c386);
+	padding: 2px;
+}
+
+/* Social Links */
+.social-links {
+	display: flex;
+	align-items: center;
+	font-size: 13px;
+
+	gap: 7px;
+
+	a {
+		color: #333333;
+	}
+
+	a:hover {
+		color: #555555;
+	}
+}

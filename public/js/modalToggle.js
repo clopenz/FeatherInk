@@ -14,9 +14,6 @@ menuToggleClose.addEventListener('click', (e) => {
 });
 
 window.addEventListener('click', (e) => {
-	e.stopPropagation();
-	console.log(e.target);
-
 	if (!headerModal.contains(e.target) && !menuToggleClose.contains(e.target)) {
 		headerModal.classList.add('hidden');
 	}

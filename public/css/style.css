@@ -21,13 +21,18 @@ li {
 	list-style: none;
 }
 
+a {
+	text-decoration: none;
+	color: black;
+}
+
 /* Header */
 .header {
 	display: flex;
 	justify-content: space-between;
-	background: linear-gradient(135deg, #f8e681, #f8ab4c);
+	background: linear-gradient(135deg, #fff09a, #ffd6a5);
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	padding: 13px 20px 13px 20px;
+	padding: 8px 20px 8px 20px;
 }
 
 .header-menu {
@@ -48,7 +53,8 @@ li {
 }
 
 .header-modal.hidden {
-	display: none;
+	transform: translate(0, -250px);
+	transition: transform 0.3s ease-in-out;
 }
 
 .header-modal {
@@ -60,6 +66,8 @@ li {
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff3ea);
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 	z-index: 9999;
+
+	transition: transform 0.3s ease-in-out;
 }
 
 .header-modal-content {
@@ -71,7 +79,7 @@ li {
 	}
 
 	li:hover {
-		background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffc69a);
+		background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 	}
 }
 
@@ -87,6 +95,27 @@ li {
 	background: none;
 }
 
+.header-modal-item.login {
+	width: 100%;
+	background-color: #f5c386;
+	padding: 10px 10px;
+	margin: 10px 0px;
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	color: #fff;
+}
+
+.header-modal-item.login:hover {
+	background: #fdd29d;
+}
+
+.logo {
+	img {
+		width: 150px;
+	}
+}
+
 /* Tabs */
 .tabs {
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff3ea);
@@ -99,26 +128,31 @@ li {
 }
 
 .tabs-item {
-	display: flex;
+	display: inline-flex;
 	font-size: 12px;
 	align-items: center;
 	justify-content: space-between;
 	padding: 0px 10px;
 	width: 150px;
-
 	height: 30px;
 	border-right: 1px solid #f1f1f1;
 }
 
+.tabs-item p {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .tabs-item:hover {
 	cursor: pointer;
-	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffc69a);
+	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 }
 
 .tabs-item.active {
 	font-size: 13px;
 	font-weight: 600;
-	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #f8cba9);
+	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 	border-top-right-radius: 4px;
 }
 
@@ -185,14 +219,7 @@ li {
 }
 
 .note-list-item:hover {
-	background: linear-gradient(
-		90deg,
-		#fff9e6,
-		#fff6e8,
-		#fff6e8,
-		#fff6e8,
-		#fdd0ae
-	);
+	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 }
 
 .note-list-title {
@@ -270,7 +297,7 @@ li {
 
 /* Footer */
 .footer {
-	background: linear-gradient(135deg, #f8e681, #f6b76a);
+	background: linear-gradient(135deg, #f8e681, #f5c386);
 	padding: 2px;
 }
 

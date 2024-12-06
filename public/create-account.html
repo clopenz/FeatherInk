@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link rel="stylesheet" href="css/register.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css"
+			integrity="sha512-9xKTRVabjVeZmc+GUW8GgSmcREDunMM+Dt/GrzchfN8tkwHizc5RP4Ok/MXFFy5rIjJjzhndFScTceq5e6GvVQ=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer" />
+		<script src="js/script.js" defer></script>
+
+		<title>FeatherInk - Notes</title>
+	</head>
+	<body>
+		<header class="header">
+			<div class="header-menu"></div>
+		</header>
+
+		<div class="main-section">
+			<div class="register-container">
+				<div class="logo"><img src="images/Logo.webp" alt="logo" /></div>
+				<br />
+
+				<a href="/" class="back-btn">Back</a>
+
+				<h2>Sign Up</h2>
+				<p>Create an account to save and download your notes.</p>
+				<br />
+				<br />
+
+				<form action="/create-account" method="POST">
+					<!-- Username or Email -->
+					<div class="form-group">
+						<label for="email">Username</label>
+						<input type="email" id="email" name="email" required />
+					</div>
+
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" required />
+					</div>
+
+					<!-- Password -->
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" id="password" name="password" required />
+					</div>
+
+					<div class="form-group">
+						<label for="password2">Confirm Password</label>
+						<input type="password" id="password2" name="password2" required />
+					</div>
+
+					<!-- Submit Button -->
+					<button type="submit" class="submit-btn">Register</button>
+				</form>
+
+				<p class="signin-link">
+					Already have an account? <a href="/login">Sign In</a>
+				</p>
+			</div>
+		</div>
+
+		<footer class="footer">
+			<ul class="social-links">
+				<div class="copyright">
+					Copyright &copy; 2024
+					<a class="portfolio-link" href="https://chriswebdev.me"
+						>ChrisWebDev</a
+					>
+				</div>
+
+				<a href="mailto:clopenz@outlook.com"
+					><i class="fas fa-solid fa-envelope"></i
+				></a>
+				<a href="https://www.linkedin.com/in/cristian-lopez-643245179/"
+					><i class="fab fa-linkedin"></i
+				></a>
+				<a href="https://github.com/clopenz"><i class="fab fa-github"></i></a>
+				<a
+					href="https://www.upwork.com/freelancers/~011ced9ea6ed5c4e8d?mp_source=share"
+					><i class="fa-brands fa-square-upwork"></i
+				></a>
+			</ul>
+		</footer>
+	</body>
+</html>

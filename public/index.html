@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="css/style.css" />
+
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css"
@@ -16,9 +17,9 @@
 	</head>
 	<body>
 		<header class="header">
-			<div class="title">FeatherInk</div>
+			<div class="logo"><img src="images/Logo.webp" alt="logo" /></div>
 			<div class="header-menu">
-				<p>Account</p>
+				<p>My Account</p>
 
 				<img src="images/Menu Toggle.png" alt="" class="menu-toggle-open" />
 			</div>
@@ -26,7 +27,7 @@
 			<div class="header-modal hidden">
 				<ul class="header-modal-content">
 					<li class="header-modal-item account">
-						<p>Account</p>
+						<p>My Account</p>
 						<img
 							src="images/Menu Toggle.png"
 							alt=""
@@ -34,7 +35,7 @@
 					</li>
 					<li class="header-modal-item">Dark Mode</li>
 					<li class="header-modal-item">Download Notes</li>
-					<li class="header-modal-item">Logout</li>
+					<a href="/login"><li class="header-modal-item login">Sign In</li></a>
 				</ul>
 			</div>
 		</header>
@@ -52,6 +53,11 @@
 				<div class="note-list">
 					<ul class="note-list-items">
 						<li class="note-list-item">
+							<div class="note-list-title">Christmas Shopping</div>
+							<div class="note-list-subtitle">$500 Budget</div>
+							<div class="note-list-date">Dec 1, 2024</div>
+						</li>
+						<li class="note-list-item">
 							<div class="note-list-title">Important Note</div>
 							<div class="note-list-subtitle">Hello there</div>
 							<div class="note-list-date">Nov 20, 2024</div>
@@ -66,6 +72,21 @@
 							<div class="note-list-subtitle">3x5 Workout</div>
 							<div class="note-list-date">Nov 19 2024</div>
 						</li>
+						<li class="note-list-item">
+							<div class="note-list-title">Passwords</div>
+							<div class="note-list-subtitle">PRIVATE INFO</div>
+							<div class="note-list-date">Nov 15, 2024</div>
+						</li>
+						<li class="note-list-item">
+							<div class="note-list-title">Games to Buy</div>
+							<div class="note-list-subtitle">PC/PS5</div>
+							<div class="note-list-date">Nov 12, 2024</div>
+						</li>
+						<li class="note-list-item">
+							<div class="note-list-title">Work Notes</div>
+							<div class="note-list-subtitle">November Meetings</div>
+							<div class="note-list-date">Nov 4, 2024</div>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -73,16 +94,20 @@
 			<div class="content-wrapper">
 				<div class="tabs">
 					<ul class="tabs-items">
+						<li class="tabs-item">
+							<p>Christmas Shopping</p>
+							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
+						</li>
 						<li class="tabs-item active">
-							Grocery List
+							<p>Grocery List</p>
 							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
 						</li>
 						<li class="tabs-item">
-							Workout List
+							<p>Workout List</p>
 							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
 						</li>
 						<li class="tabs-item">
-							Important Note
+							<p>Important Note</p>
 							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
 						</li>
 					</ul>
