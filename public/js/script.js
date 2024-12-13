@@ -1,22 +1,56 @@
+// Check and remove token
+window.onload = () => checkAndRemoveToken();
+
 // Display user data on main page
 if (window.location.pathname === '/') {
-	displayUserData();
+	displayUserName();
+	displayUserNotes();
 	checkIfLoggedIn();
+}
 
-	async function displayUserData() {
-		const token = localStorage.getItem('token');
+// Display User's Name
+async function displayUserName() {
+	const accountName = document.querySelector('.account-name');
+	const token = localStorage.getItem('token');
+	const refreshToken = localStorage.getItem('refreshToken');
 
-		if (token) {
-			try {
-				const userData = await getUserData();
+	if (token || refreshToken) {
+		try {
+			const userData = await getUserData(token, refreshToken);
+			accountName.textContent = userData.username;
+		} catch (error) {
+			console.error('Failed to fetch user data:', error);
+		}
+	} else {
+		accountName.textContent = 'Sign In';
+	}
+}
 
-				const accountName = document.querySelector('.account-name');
-				accountName.textContent = userData.username;
-			} catch (error) {
-				console.error('Failed to fetch user data:', error);
+// Display Notes
+async function displayUserNotes() {
+	const token = localStorage.getItem('token');
+	const refreshToken = localStorage.getItem('refreshToken');
+
+	if (token || refreshToken) {
+		try {
+			const notes = await getUserNotes(token, refreshToken);
+			console.log(notes);
+			if (notes) {
+				const noteListItems = document.querySelector('.note-list-items');
+
+				notes.forEach((note) => {
+					const noteItem = document.createElement('li');
+					noteItem.classList.add('note-list-item');
+					noteItem.innerHTML = `
+						<div class="note-list-title">${note.title}</div>
+						<div class="note-list-subtitle">${note.subtitle}</div>
+						<div class="note-list-date">${note.createdAt}</div>
+					`;
+					noteListItems.appendChild(noteItem);
+				});
 			}
-		} else {
-			console.log('User not logged in');
+		} catch (error) {
+			console.error('Failed to fetch user notes:', error);
 		}
 	}
 }
@@ -39,6 +73,7 @@ async function handleLogin(e) {
 
 		if (response.ok && result.token) {
 			localStorage.setItem('token', result.token);
+			localStorage.setItem('refreshToken', result.refreshToken);
 
 			window.location.href = '/';
 		} else {
@@ -50,18 +85,29 @@ async function handleLogin(e) {
 }
 
 // Get user data from the token
-async function getUserData() {
-	const token = localStorage.getItem('token');
-
+async function getUserData(token, refreshToken) {
 	const response = await fetch('/user-data', {
 		method: 'GET',
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token ? token : refreshToken}`,
 		},
 	});
 
 	const data = await response.json();
-	console.log('User Data:', data);
+
+	return data;
+}
+
+// Fetch user's notes
+async function getUserNotes(token, refreshToken) {
+	const response = await fetch('/user-notes', {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${token ? token : refreshToken}`,
+		},
+	});
+
+	const data = await response.json();
 
 	return data;
 }
@@ -80,4 +126,19 @@ function checkIfLoggedIn() {
 
 function handleLogout() {
 	localStorage.removeItem('token');
+	localStorage.removeItem('refreshToken');
+}
+
+function checkAndRemoveToken() {
+	const token = localStorage.getItem('token');
+
+	if (token && isTokenExpired(token)) {
+		localStorage.removeItem('token');
+	}
+}
+
+function isTokenExpired(token) {
+	const payload = JSON.parse(atob(token.split('.')[1]));
+	const now = Math.floor(Date.now() / 1000);
+	return payload.exp < now;
 }
