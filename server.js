@@ -119,6 +119,40 @@ app.get(
 	}
 );
 
+// Save Note
+app.post(
+	'/save-note',
+	authenticateToken,
+
+	async (req, res) => {
+		try {
+		} catch (error) {}
+	}
+);
+
+// Create Note
+app.post(
+	'/create-note',
+	authenticateToken,
+
+	async (req, res) => {
+		try {
+		} catch (error) {}
+	}
+);
+
+// Delete Note
+// Create Note
+app.delete(
+	'/delete-note',
+	authenticateToken,
+
+	async (req, res) => {
+		try {
+		} catch (error) {}
+	}
+);
+
 // Login route
 app.post('/login', async (req, res) => {
 	const { email, password } = req.body;

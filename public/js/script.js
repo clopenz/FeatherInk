@@ -1,3 +1,5 @@
+let notesList = [];
+
 // Check and remove token
 window.onload = () => checkAndRemoveToken();
 
@@ -34,6 +36,8 @@ async function displayUserNotes() {
 	if (token || refreshToken) {
 		try {
 			const notes = await getUserNotes(token, refreshToken);
+
+			notesList = notes;
 
 			if (notes) {
 				const noteListItems = document.querySelector('.note-list-items');
@@ -80,7 +84,27 @@ async function displayUserNotes() {
 							.querySelector('.close-button')
 							.addEventListener('click', (e) => {
 								e.stopPropagation();
+
+								const wasActive = newTab.classList.contains('active');
 								closeTab(newTab);
+
+								if (wasActive) {
+									const firstTab = [...tabsItems.children][0];
+									if (firstTab) {
+										setActiveTab(firstTab);
+										const firstNote = getUserNoteById(firstTab.dataset.id);
+
+										displayNoteonMainContent(firstNote);
+									} else {
+										const emptyNote = {
+											title: '',
+											subtitle: '',
+											content: '',
+										};
+
+										displayNoteonMainContent(emptyNote);
+									}
+								}
 							});
 
 						tabsItems.insertBefore(newTab, tabsItems.firstChild);
@@ -92,7 +116,7 @@ async function displayUserNotes() {
 				});
 			}
 		} catch (error) {
-			console.error('Failed to fetch user notes:', error);
+			console.error('User not logged in');
 		}
 	}
 }
@@ -179,6 +203,11 @@ async function getUserNotes(token, refreshToken) {
 	return data;
 }
 
+// Get user's note by ID
+function getUserNoteById(noteId) {
+	return notesList.find((note) => note._id === noteId);
+}
+
 // Handle Logout
 function checkIfLoggedIn() {
 	const token = localStorage.getItem('token');
@@ -208,4 +237,19 @@ function isTokenExpired(token) {
 	const payload = JSON.parse(atob(token.split('.')[1]));
 	const now = Math.floor(Date.now() / 1000);
 	return payload.exp < now;
+}
+
+// Save note
+function saveNote() {
+
+}
+
+// Create Note
+function createNote() {
+
+}
+
+// Delete Note
+function deleteNote() {
+	
 }
