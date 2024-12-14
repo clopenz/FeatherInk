@@ -34,9 +34,10 @@ async function displayUserNotes() {
 	if (token || refreshToken) {
 		try {
 			const notes = await getUserNotes(token, refreshToken);
-			console.log(notes);
+
 			if (notes) {
 				const noteListItems = document.querySelector('.note-list-items');
+				const tabsItems = document.querySelector('.tabs-items');
 
 				notes.forEach((note) => {
 					const noteItem = document.createElement('li');
@@ -47,12 +48,78 @@ async function displayUserNotes() {
 						<div class="note-list-date">${note.createdAt}</div>
 					`;
 					noteListItems.appendChild(noteItem);
+
+					// Add click event to create a tab
+					noteItem.addEventListener('click', () => {
+						const existingTab = [...tabsItems.children].find(
+							(tab) => tab.dataset.id === note._id
+						);
+
+						if (existingTab) {
+							setActiveTab(existingTab);
+							displayNoteonMainContent(note);
+							return;
+						}
+
+						// Create new tab
+						const newTab = document.createElement('li');
+						newTab.innerHTML = `
+							<p>${note.title}</p>
+							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
+						`;
+						newTab.dataset.id = note._id;
+						newTab.classList.add('tabs-item');
+						newTab.classList.add('active');
+
+						newTab.addEventListener('click', () => {
+							setActiveTab(newTab);
+							displayNoteonMainContent(note);
+						});
+
+						newTab
+							.querySelector('.close-button')
+							.addEventListener('click', (e) => {
+								e.stopPropagation();
+								closeTab(newTab);
+							});
+
+						tabsItems.insertBefore(newTab, tabsItems.firstChild);
+						setActiveTab(newTab);
+
+						// Display note content
+						displayNoteonMainContent(note);
+					});
 				});
 			}
 		} catch (error) {
 			console.error('Failed to fetch user notes:', error);
 		}
 	}
+}
+
+// Helper to set active tab
+function setActiveTab(tab) {
+	const tabsItems = document.querySelector('.tabs-items');
+	[...tabsItems.children].forEach((t) => t.classList.remove('active'));
+	tab.classList.add('active');
+}
+
+// Close tab
+function closeTab(tab) {
+	const tabsItems = document.querySelector('.tabs-items');
+	tabsItems.removeChild(tab);
+}
+
+// Display notes on main content
+function displayNoteonMainContent(note) {
+	const noteContentWrapper = document.querySelector('.note-content-wrapper');
+	const noteTitle = document.querySelector('.note-title');
+	const noteSubtitle = document.querySelector('.note-subtitle');
+	const noteContent = document.querySelector('.note-content');
+
+	noteTitle.value = note.title;
+	noteSubtitle.value = note.subtitle;
+	noteContent.value = note.content;
 }
 
 // Handle Login

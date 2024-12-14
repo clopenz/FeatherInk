@@ -124,11 +124,13 @@ a {
 .tabs {
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff3ea);
 	border-bottom: 1px solid #f1f1f1;
+	height: 30px;
 }
 
 .tabs-items {
 	display: flex;
 	align-items: center;
+	height: 100%;
 }
 
 .tabs-item {
@@ -138,7 +140,7 @@ a {
 	justify-content: space-between;
 	padding: 0px 10px;
 	width: 150px;
-	height: 30px;
+	height: 100%;
 	border-right: 1px solid #f1f1f1;
 }
 
@@ -149,7 +151,7 @@ a {
 }
 
 .tabs-item:hover {
-	cursor: pointer;
+	user-select: none;
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 }
 
@@ -158,6 +160,11 @@ a {
 	font-weight: 600;
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 	border-top-right-radius: 4px;
+}
+
+.close-button:hover {
+	cursor: pointer;
+	color: red;
 }
 
 /* Note List */
@@ -223,6 +230,10 @@ a {
 }
 
 .note-list-item:hover {
+	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
+}
+
+.note-list-item.active {
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
 }
 
