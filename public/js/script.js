@@ -1,4 +1,5 @@
 let notesList = [];
+let currentNoteDisplayed = {};
 
 // Check and remove token
 window.onload = () => checkAndRemoveToken();
@@ -136,7 +137,6 @@ function closeTab(tab) {
 
 // Display notes on main content
 function displayNoteonMainContent(note) {
-	const noteContentWrapper = document.querySelector('.note-content-wrapper');
 	const noteTitle = document.querySelector('.note-title');
 	const noteSubtitle = document.querySelector('.note-subtitle');
 	const noteContent = document.querySelector('.note-content');
@@ -144,6 +144,8 @@ function displayNoteonMainContent(note) {
 	noteTitle.value = note.title;
 	noteSubtitle.value = note.subtitle;
 	noteContent.value = note.content;
+
+	currentNoteDisplayed = note;
 }
 
 // Handle Login
@@ -230,6 +232,7 @@ function checkAndRemoveToken() {
 
 	if (token && isTokenExpired(token)) {
 		localStorage.removeItem('token');
+		window.location.href = '/';
 	}
 }
 
@@ -240,16 +243,43 @@ function isTokenExpired(token) {
 }
 
 // Save note
-function saveNote() {
-
+function saveNote(note) {
+	console.log('Saving note:', note);
 }
 
 // Create Note
-function createNote() {
+async function createNote() {
+	const token = localStorage.getItem('token');
+	const noteTitle = document.querySelector('.note-title');
+	const noteSubtitle = document.querySelector('.note-subtitle');
+	const noteContent = document.querySelector('.note-content');
 
+	try {
+		const response = await fetch('/create-note', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token ? token : refreshToken}`,
+			},
+			body: JSON.stringify({
+				title: noteTitle.value,
+				subtitle: noteSubtitle.value,
+				content: noteContent.value,
+			}),
+		});
+
+		if (response.ok) {
+			console.log('Note created successfully');
+			const noteListItems = document.querySelector('.note-list-items');
+			noteListItems.innerHTML = '';
+			await displayUserNotes();
+		} else {
+			console.error('Failed to create note:', response.statusText);
+		}
+	} catch (error) {
+		console.error('Failed to create note:', error);
+	}
 }
 
 // Delete Note
-function deleteNote() {
-	
-}
+function deleteNote() {}

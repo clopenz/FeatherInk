@@ -246,6 +246,7 @@ a {
 }
 
 .fa-floppy-disk {
+	display: flex;
 	user-select: none;
 	font-size: 25px;
 	text-align: center;
@@ -253,7 +254,7 @@ a {
 	position: absolute;
 	bottom: 25px;
 	left: 310px;
-	color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.4);
 
 	cursor: pointer;
 	&:hover {
