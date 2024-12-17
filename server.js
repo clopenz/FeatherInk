@@ -160,7 +160,7 @@ app.post(
 			// Save the note
 			await note.save();
 
-			res.status(200).json({ message: 'Note created successfully' });
+			res.status(200).json({ message: 'Note created successfully', note });
 		} catch (error) {
 			console.error('Error creating note:', error);
 			res.status(500).json({ message: 'Server error', error });

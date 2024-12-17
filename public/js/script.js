@@ -42,7 +42,6 @@ async function displayUserNotes() {
 
 			if (notes) {
 				const noteListItems = document.querySelector('.note-list-items');
-				const tabsItems = document.querySelector('.tabs-items');
 
 				notes.forEach((note) => {
 					const noteItem = document.createElement('li');
@@ -56,63 +55,7 @@ async function displayUserNotes() {
 
 					// Add click event to create a tab
 					noteItem.addEventListener('click', () => {
-						const existingTab = [...tabsItems.children].find(
-							(tab) => tab.dataset.id === note._id
-						);
-
-						if (existingTab) {
-							setActiveTab(existingTab);
-							displayNoteonMainContent(note);
-							return;
-						}
-
-						// Create new tab
-						const newTab = document.createElement('li');
-						newTab.innerHTML = `
-							<p>${note.title}</p>
-							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
-						`;
-						newTab.dataset.id = note._id;
-						newTab.classList.add('tabs-item');
-						newTab.classList.add('active');
-
-						newTab.addEventListener('click', () => {
-							setActiveTab(newTab);
-							displayNoteonMainContent(note);
-						});
-
-						newTab
-							.querySelector('.close-button')
-							.addEventListener('click', (e) => {
-								e.stopPropagation();
-
-								const wasActive = newTab.classList.contains('active');
-								closeTab(newTab);
-
-								if (wasActive) {
-									const firstTab = [...tabsItems.children][0];
-									if (firstTab) {
-										setActiveTab(firstTab);
-										const firstNote = getUserNoteById(firstTab.dataset.id);
-
-										displayNoteonMainContent(firstNote);
-									} else {
-										const emptyNote = {
-											title: '',
-											subtitle: '',
-											content: '',
-										};
-
-										displayNoteonMainContent(emptyNote);
-									}
-								}
-							});
-
-						tabsItems.insertBefore(newTab, tabsItems.firstChild);
-						setActiveTab(newTab);
-
-						// Display note content
-						displayNoteonMainContent(note);
+						createTab(note);
 					});
 				});
 			}
@@ -120,6 +63,67 @@ async function displayUserNotes() {
 			console.error('User not logged in');
 		}
 	}
+}
+
+// Create new tab
+function createTab(note) {
+	const tabsItems = document.querySelector('.tabs-items');
+
+	const existingTab = [...tabsItems.children].find(
+		(tab) => tab.dataset.id === note._id
+	);
+
+	if (existingTab) {
+		setActiveTab(existingTab);
+		displayNoteonMainContent(note);
+		return;
+	}
+
+	// Create new tab
+	const newTab = document.createElement('li');
+	newTab.innerHTML = `
+							<p>${note.title}</p>
+							<div class="close-button"><i class="fa-solid fa-xmark"></i></div>
+						`;
+	newTab.dataset.id = note._id;
+	newTab.classList.add('tabs-item');
+	newTab.classList.add('active');
+
+	newTab.addEventListener('click', () => {
+		setActiveTab(newTab);
+		displayNoteonMainContent(note);
+	});
+
+	newTab.querySelector('.close-button').addEventListener('click', (e) => {
+		e.stopPropagation();
+
+		const wasActive = newTab.classList.contains('active');
+		closeTab(newTab);
+
+		if (wasActive) {
+			const firstTab = [...tabsItems.children][0];
+			if (firstTab) {
+				setActiveTab(firstTab);
+				const firstNote = getUserNoteById(firstTab.dataset.id);
+
+				displayNoteonMainContent(firstNote);
+			} else {
+				const emptyNote = {
+					title: '',
+					subtitle: '',
+					content: '',
+				};
+
+				displayNoteonMainContent(emptyNote);
+			}
+		}
+	});
+
+	tabsItems.insertBefore(newTab, tabsItems.firstChild);
+	setActiveTab(newTab);
+
+	// Display note content
+	displayNoteonMainContent(note);
 }
 
 // Helper to set active tab
@@ -269,9 +273,11 @@ async function createNote() {
 		});
 
 		if (response.ok) {
-			console.log('Note created successfully');
+			const data = await response.json();
+
 			const noteListItems = document.querySelector('.note-list-items');
 			noteListItems.innerHTML = '';
+			await createTab(data.note);
 			await displayUserNotes();
 		} else {
 			console.error('Failed to create note:', response.statusText);
