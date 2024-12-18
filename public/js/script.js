@@ -1,5 +1,6 @@
 let notesList = [];
 let currentNoteDisplayed = {};
+let activeTab = null;
 
 // Check and remove token
 window.onload = () => checkAndRemoveToken();
@@ -34,6 +35,9 @@ async function displayUserNotes() {
 	const token = localStorage.getItem('token');
 	const refreshToken = localStorage.getItem('refreshToken');
 
+	const noteListItems = document.querySelector('.note-list-items');
+	noteListItems.innerHTML = '';
+
 	if (token || refreshToken) {
 		try {
 			const notes = await getUserNotes(token, refreshToken);
@@ -46,12 +50,23 @@ async function displayUserNotes() {
 				notes.forEach((note) => {
 					const noteItem = document.createElement('li');
 					noteItem.classList.add('note-list-item');
+
+					const date = new Date(note.updatedAt).toLocaleString('en-US');
+
 					noteItem.innerHTML = `
 						<div class="note-list-title">${note.title}</div>
 						<div class="note-list-subtitle">${note.subtitle}</div>
-						<div class="note-list-date">${note.createdAt}</div>
+						<div class="note-list-date">${date}</div>
+						<div class="delete-note"><i class="fa-solid fa-trash-can"></i></div>
 					`;
 					noteListItems.appendChild(noteItem);
+
+					// Add click event to delete note
+					const deleteNoteBtn = noteItem.querySelector('.delete-note');
+					deleteNoteBtn.addEventListener('click', (e) => {
+						e.stopPropagation();
+						deleteNote(note);
+					});
 
 					// Add click event to create a tab
 					noteItem.addEventListener('click', () => {
@@ -60,7 +75,7 @@ async function displayUserNotes() {
 				});
 			}
 		} catch (error) {
-			console.error('User not logged in');
+			console.error('Error', error);
 		}
 	}
 }
@@ -131,6 +146,8 @@ function setActiveTab(tab) {
 	const tabsItems = document.querySelector('.tabs-items');
 	[...tabsItems.children].forEach((t) => t.classList.remove('active'));
 	tab.classList.add('active');
+
+	activeTab = tab;
 }
 
 // Close tab
@@ -251,12 +268,26 @@ function saveNote(note) {
 	console.log('Saving note:', note);
 }
 
+// Add note listener
+const addNoteBtn = document.querySelector('.add-note');
+addNoteBtn.addEventListener('click', createNote);
+
 // Create Note
 async function createNote() {
 	const token = localStorage.getItem('token');
-	const noteTitle = document.querySelector('.note-title');
-	const noteSubtitle = document.querySelector('.note-subtitle');
-	const noteContent = document.querySelector('.note-content');
+	const noteTitleForm = document.querySelector('.note-title');
+	const noteSubtitleForm = document.querySelector('.note-subtitle');
+	const noteContentForm = document.querySelector('.note-content');
+
+	let noteTitle = noteTitleForm.value;
+	let noteSubtitle = noteSubtitleForm.value;
+	let noteContent = noteContentForm.value;
+
+	if (!noteTitle) {
+		noteTitle = 'Untitled';
+		noteSubtitle = '';
+		noteContent = '';
+	}
 
 	try {
 		const response = await fetch('/create-note', {
@@ -266,17 +297,15 @@ async function createNote() {
 				Authorization: `Bearer ${token ? token : refreshToken}`,
 			},
 			body: JSON.stringify({
-				title: noteTitle.value,
-				subtitle: noteSubtitle.value,
-				content: noteContent.value,
+				title: noteTitle,
+				subtitle: noteSubtitle,
+				content: noteContent,
 			}),
 		});
 
 		if (response.ok) {
 			const data = await response.json();
 
-			const noteListItems = document.querySelector('.note-list-items');
-			noteListItems.innerHTML = '';
 			await createTab(data.note);
 			await displayUserNotes();
 		} else {
@@ -288,4 +317,27 @@ async function createNote() {
 }
 
 // Delete Note
-function deleteNote() {}
+async function deleteNote(note) {
+	const token = localStorage.getItem('token');
+	try {
+		const response = await fetch('/delete-note', {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token ? token : refreshToken}`,
+			},
+			body: JSON.stringify({
+				noteId: note._id,
+			}),
+		});
+
+		if (response.ok) {
+			await displayUserNotes();
+			await closeTab(activeTab);
+		} else {
+			console.error('Failed to create note:', response.statusText);
+		}
+	} catch (error) {
+		console.error('Failed to delete note:', error);
+	}
+}

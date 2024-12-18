@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const { BSON } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -152,8 +153,8 @@ app.post(
 				title,
 				subtitle,
 				content,
-				createdAt: new Date(),
-				updatedAt: new Date(),
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
 				userId: req.user.id,
 			});
 
@@ -169,14 +170,20 @@ app.post(
 );
 
 // Delete Note
-
 app.delete(
 	'/delete-note',
 	authenticateToken,
 
 	async (req, res) => {
 		try {
-		} catch (error) {}
+			const noteId = req.body.noteId;
+			const result = await Note.findByIdAndDelete(noteId);
+
+			res.status(200).json({ message: 'Note deleted successfully' });
+		} catch (error) {
+			console.error('Error deleting note:', error);
+			res.status(500).json({ message: 'Error deleting note', error });
+		}
 	}
 );
 

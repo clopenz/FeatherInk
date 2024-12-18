@@ -4,12 +4,33 @@
 	box-sizing: border-box;
 }
 
+/* Scrollbar */
+/* For WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+	width: 5px; /* Width of the scrollbar */
+	height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #ffc1074f; /* Scrollbar thumb color */
+	border-radius: 5px; /* Rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #ffa2005b; /* Thumb color on hover */
+}
+
+::-webkit-scrollbar-track {
+	background: none; /* Scrollbar track color */
+	border-radius: 5px; /* Optional: match thumb's rounded edges */
+}
+
 /* General */
 html,
 body {
 	height: 100%;
-	max-height: 100vh;
-	overflow-y: hidden;
+	height: 100vh;
+	overflow: hidden;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -126,17 +147,19 @@ a {
 .tabs {
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff3ea);
 	border-bottom: 1px solid #f1f1f1;
-	height: 30px;
+	height: 35px;
 }
 
 .tabs-items {
 	display: flex;
 	align-items: center;
 	height: 100%;
+	overflow-x: auto;
+	max-width: calc(100vw - 300px);
 }
 
 .tabs-item {
-	display: inline-flex;
+	display: flex;
 	font-size: 12px;
 	align-items: center;
 	justify-content: space-between;
@@ -170,18 +193,6 @@ a {
 }
 
 /* Note List */
-.note-list-wrapper {
-	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff3ea);
-	border-right: 1px solid #f1f1f1;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-	min-width: 300px;
-	max-height: 500px;
-	overflow: hidden;
-}
-
 .note-list-header {
 	display: flex;
 	gap: 5px;
@@ -272,11 +283,41 @@ a {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.delete-note {
+	position: absolute;
+	opacity: 0.5;
+	bottom: 10px;
+	right: 10px;
+}
+
+.delete-note:hover {
+	cursor: pointer;
+	color: #007bff;
+	opacity: 1;
+}
+
+.note-list-wrapper {
+	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff3ea);
+	border-right: 1px solid #f1f1f1;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+	min-width: 300px;
+	height: calc(100vh - 77px);
+	overflow: hidden;
+}
+
+.note-list-items {
+	overflow-y: auto;
+	flex: 1;
+	height: calc(100vh - 120px);
+}
+
 .note-list-item {
 	position: relative;
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #fff3ea);
-	height: 80px;
-
+	height: 104px;
 	border-bottom: 1px solid #f1f1f1;
 	border-radius: 4px;
 	cursor: pointer;
@@ -289,12 +330,6 @@ a {
 
 .note-list-item.active {
 	background: linear-gradient(90deg, #fff9e6, #fff6e8, #fff6e8, #ffe0c7);
-}
-
-.note-list-items {
-	overflow-y: auto;
-	height: 100%;
-	flex: 1;
 }
 
 .note-list-title {
