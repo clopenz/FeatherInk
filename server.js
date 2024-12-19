@@ -126,13 +126,19 @@ app.get(
 );
 
 // Save Note
-app.post(
+app.put(
 	'/save-note',
 	authenticateToken,
 
 	async (req, res) => {
 		try {
-			console.log('save note');
+			const result = await Note.findByIdAndUpdate(req.body.noteId, {
+				title: req.body.title,
+				subtitle: req.body.subtitle,
+				content: req.body.content,
+				updatedAt: new Date().toISOString(),
+			});
+			res.status(200).json({ message: 'Note saved successfully' });
 		} catch (error) {
 			console.error('Error creating note:', error);
 			res.status(500).json({ message: 'Server error', error });

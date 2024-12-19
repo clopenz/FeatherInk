@@ -112,26 +112,7 @@ function createTab(note) {
 	newTab.querySelector('.close-button').addEventListener('click', (e) => {
 		e.stopPropagation();
 
-		const wasActive = newTab.classList.contains('active');
 		closeTab(newTab);
-
-		if (wasActive) {
-			const firstTab = [...tabsItems.children][0];
-			if (firstTab) {
-				setActiveTab(firstTab);
-				const firstNote = getUserNoteById(firstTab.dataset.id);
-
-				displayNoteonMainContent(firstNote);
-			} else {
-				const emptyNote = {
-					title: '',
-					subtitle: '',
-					content: '',
-				};
-
-				displayNoteonMainContent(emptyNote);
-			}
-		}
 	});
 
 	tabsItems.insertBefore(newTab, tabsItems.firstChild);
@@ -154,6 +135,26 @@ function setActiveTab(tab) {
 function closeTab(tab) {
 	const tabsItems = document.querySelector('.tabs-items');
 	tabsItems.removeChild(tab);
+
+	const wasActive = tab.classList.contains('active');
+
+	if (wasActive) {
+		const firstTab = [...tabsItems.children][0];
+		if (firstTab) {
+			setActiveTab(firstTab);
+			const firstNote = getUserNoteById(firstTab.dataset.id);
+
+			displayNoteonMainContent(firstNote);
+		} else {
+			const emptyNote = {
+				title: '',
+				subtitle: '',
+				content: '',
+			};
+
+			displayNoteonMainContent(emptyNote);
+		}
+	}
 }
 
 // Display notes on main content
@@ -264,8 +265,51 @@ function isTokenExpired(token) {
 }
 
 // Save note
-function saveNote(note) {
-	console.log('Saving note:', note);
+async function saveNote(note) {
+	const token = localStorage.getItem('token');
+	const noteTitleForm = document.querySelector('.note-title');
+	const noteSubtitleForm = document.querySelector('.note-subtitle');
+	const noteContentForm = document.querySelector('.note-content');
+
+	const noteAlreadyExists = getUserNoteById(note._id);
+
+	if (noteAlreadyExists) {
+		try {
+			const response = await fetch('/save-note', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token ? token : refreshToken}`,
+				},
+				body: JSON.stringify({
+					noteId: note._id,
+					title: noteTitleForm.value,
+					subtitle: noteSubtitleForm.value,
+					content: noteContentForm.value,
+				}),
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+
+				await displayUserNotes();
+			} else {
+				console.error('Failed to create note:', response.statusText);
+			}
+		} catch (error) {
+			console.error('Failed to save note:', error);
+		}
+	} else if (noteTitleForm.value) {
+		const n = {
+			title: noteTitleForm.value,
+			subtitle: noteSubtitleForm.value,
+			content: noteContentForm.value,
+		};
+
+		createNote(n);
+	} else {
+		createNote();
+	}
 }
 
 // Add note listener
@@ -273,20 +317,17 @@ const addNoteBtn = document.querySelector('.add-note');
 addNoteBtn.addEventListener('click', createNote);
 
 // Create Note
-async function createNote() {
+async function createNote(note) {
 	const token = localStorage.getItem('token');
-	const noteTitleForm = document.querySelector('.note-title');
-	const noteSubtitleForm = document.querySelector('.note-subtitle');
-	const noteContentForm = document.querySelector('.note-content');
 
-	let noteTitle = noteTitleForm.value;
-	let noteSubtitle = noteSubtitleForm.value;
-	let noteContent = noteContentForm.value;
+	let noteTitle = 'Untitled';
+	let noteSubtitle = '';
+	let noteContent = '';
 
-	if (!noteTitle) {
-		noteTitle = 'Untitled';
-		noteSubtitle = '';
-		noteContent = '';
+	if (note.title || note.subtitle || note.content) {
+		noteTitle = note.title;
+		noteSubtitle = note.subtitle;
+		noteContent = note.content;
 	}
 
 	try {

@@ -5,11 +5,5 @@ saveButton.addEventListener('click', () => {
 
 	if (!noteTitle.value) return window.alert('Please enter a title.');
 
-	const noteAlreadyExists = getUserNoteById(currentNoteDisplayed._id);
-
-	if (noteAlreadyExists) {
-		saveNote(currentNoteDisplayed);
-	} else {
-		createNote();
-	}
+	saveNote(currentNoteDisplayed);
 });
