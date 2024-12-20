@@ -29,7 +29,7 @@
 html,
 body {
 	height: 100%;
-	height: 100vh;
+
 	overflow: hidden;
 	font-family: Arial, Helvetica, sans-serif;
 }
@@ -195,19 +195,18 @@ a {
 /* Note List */
 .note-list-header {
 	display: flex;
-	gap: 5px;
-	justify-content: space-evenly;
+	gap: 8px;
+	justify-content: space-between;
 	align-items: center;
 	font-size: 16px;
-	padding: 6px;
+	padding: 6px 8px;
 	border-bottom: 1px solid #f1f1f1;
 }
 
 .search-wrapper {
 	display: flex;
 	position: relative;
-	justify-content: center;
-
+	width: 100%;
 	height: 30px;
 	background: #fff;
 	border-radius: 20px;
@@ -242,7 +241,8 @@ a {
 
 .fa-arrow-down-wide-short,
 .fa-circle-check,
-.fa-plus {
+.fa-plus,
+.fa-floppy-disk {
 	display: flex;
 	font-size: 18px;
 	color: #363636;
@@ -253,15 +253,48 @@ a {
 	}
 }
 
-.filter,
-.select-all,
-.add-note {
+/* .filter,
+.select-all, */
+.add-note,
+.save-note,
+.delete-note {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	position: relative;
+	z-index: 100;
 }
 
-.fa-floppy-disk {
+.hover-label {
+	display: none; /* Initially hidden */
+	position: absolute; /* Allows you to position the label where you want */
+	top: -30px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #333;
+	color: #fff;
+	padding: 5px;
+	border-radius: 5px;
+	white-space: nowrap;
+	font-size: 14px;
+	z-index: 100; /* Ensures it appears above other content */
+}
+
+.hover-label.delete-label {
+	top: 0px;
+	left: -80px;
+	transform: translateY(-25%);
+	padding: 5px;
+	font-size: 12px;
+}
+
+.add-note:hover .hover-label.add-label,
+.save-note:hover .hover-label.save-label,
+.delete-note:hover .hover-label.delete-label {
+	display: block; /* Make the label visible on hover */
+}
+
+/* .fa-floppy-disk {
 	display: flex;
 	user-select: none;
 	font-size: 25px;
@@ -276,24 +309,26 @@ a {
 	&:hover {
 		color: #007bff;
 	}
-}
+} */
 
-.fa-floppy-disk p {
+/* .fa-floppy-disk p {
 	font-size: 12px;
 	font-family: Arial, Helvetica, sans-serif;
-}
+} */
 
 .delete-note {
 	position: absolute;
 	opacity: 0.5;
 	bottom: 10px;
 	right: 10px;
+	z-index: 100;
 }
 
 .delete-note:hover {
 	cursor: pointer;
 	color: #007bff;
 	opacity: 1;
+	z-index: 100;
 }
 
 .note-list-wrapper {
@@ -305,11 +340,11 @@ a {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 	min-width: 300px;
 	height: calc(100vh - 77px);
-	overflow: hidden;
 }
 
 .note-list-items {
 	overflow-y: auto;
+
 	flex: 1;
 	height: calc(100vh - 120px);
 }

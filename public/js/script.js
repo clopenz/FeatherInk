@@ -57,7 +57,9 @@ async function displayUserNotes() {
 						<div class="note-list-title">${note.title}</div>
 						<div class="note-list-subtitle">${note.subtitle}</div>
 						<div class="note-list-date">${date}</div>
-						<div class="delete-note"><i class="fa-solid fa-trash-can"></i></div>
+						<div class="delete-note"><i class="fa-solid fa-trash-can"></i>
+						<span class="hover-label delete-label">Delete Note</span>
+						</div>
 					`;
 					noteListItems.appendChild(noteItem);
 
@@ -65,7 +67,12 @@ async function displayUserNotes() {
 					const deleteNoteBtn = noteItem.querySelector('.delete-note');
 					deleteNoteBtn.addEventListener('click', (e) => {
 						e.stopPropagation();
-						deleteNote(note);
+
+						if (window.confirm('Are you sure you want to delete this note?'))
+							deleteNote(note);
+						else {
+							return;
+						}
 					});
 
 					// Add click event to create a tab
@@ -263,6 +270,17 @@ function isTokenExpired(token) {
 	const now = Math.floor(Date.now() / 1000);
 	return payload.exp < now;
 }
+
+// Save note listener
+const saveButton = document.querySelector('.fa-floppy-disk');
+
+saveButton.addEventListener('click', () => {
+	const noteTitle = document.querySelector('.note-title');
+
+	if (!noteTitle.value) return window.alert('Please enter a title.');
+
+	saveNote(currentNoteDisplayed);
+});
 
 // Save note
 async function saveNote(note) {
