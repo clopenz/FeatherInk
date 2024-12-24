@@ -129,6 +129,11 @@ function createTab(note) {
 	displayNoteonMainContent(note);
 }
 
+// Update tab title
+function updateTabTitle(tab, title) {
+	tab.querySelector('p').textContent = title;
+}
+
 // Helper to set active tab
 function setActiveTab(tab) {
 	const tabsItems = document.querySelector('.tabs-items');
@@ -242,7 +247,8 @@ function getUserNoteById(noteId) {
 // Handle Logout
 function checkIfLoggedIn() {
 	const token = localStorage.getItem('token');
-	if (token) {
+	const refreshToken = localStorage.getItem('refreshToken');
+	if (token || refreshToken) {
 		const signOutBtn = document.querySelector('.header-modal-item.login');
 
 		signOutBtn.textContent = 'Sign Out';
@@ -258,9 +264,15 @@ function handleLogout() {
 
 function checkAndRemoveToken() {
 	const token = localStorage.getItem('token');
+	const refreshToken = localStorage.getItem('refreshToken');
 
 	if (token && isTokenExpired(token)) {
 		localStorage.removeItem('token');
+		window.location.href = '/';
+	}
+
+	if (refreshToken && isTokenExpired(refreshToken)) {
+		localStorage.removeItem('refreshToken');
 		window.location.href = '/';
 	}
 }
@@ -309,6 +321,8 @@ async function saveNote(note) {
 
 			if (response.ok) {
 				const data = await response.json();
+
+				await updateTabTitle(activeTab, noteTitleForm.value);
 
 				await displayUserNotes();
 			} else {
