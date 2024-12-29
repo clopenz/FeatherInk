@@ -15,12 +15,12 @@ if (window.location.pathname === '/') {
 // Display User's Name
 async function displayUserName() {
 	const accountName = document.querySelector('.account-name');
-	const token = localStorage.getItem('token');
-	const refreshToken = localStorage.getItem('refreshToken');
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
 
-	if (token || refreshToken) {
+	if (token) {
 		try {
-			const userData = await getUserData(token, refreshToken);
+			const userData = await getUserData(token);
 			accountName.textContent = userData.username;
 		} catch (error) {
 			console.error('Failed to fetch user data:', error);
@@ -32,15 +32,15 @@ async function displayUserName() {
 
 // Display Notes
 async function displayUserNotes() {
-	const token = localStorage.getItem('token');
-	const refreshToken = localStorage.getItem('refreshToken');
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
 
 	const noteListItems = document.querySelector('.note-list-items');
 	noteListItems.innerHTML = '';
 
-	if (token || refreshToken) {
+	if (token) {
 		try {
-			const notes = await getUserNotes(token, refreshToken);
+			const notes = await getUserNotes(token);
 
 			notesList = notes;
 
@@ -211,53 +211,12 @@ async function handleLogin(e) {
 	}
 }
 
-// Handle Register
-document.addEventListener('DOMContentLoaded', () => {
-	const form = document.getElementById('create-account-form');
-
-	form.addEventListener('submit', async (event) => {
-		// Prevent default form submission
-		event.preventDefault();
-
-		// Collect form data
-		const formData = new FormData(form);
-		const data = Object.fromEntries(formData.entries());
-
-		try {
-			// Send data to the server using fetch
-			const response = await fetch('/create-account', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-
-			// Handle the response
-			const result = await response.json();
-
-			if (response.ok) {
-				// Success message or redirect
-				alert('Account created successfully!');
-				window.location.href = '/'; // Example redirect
-			} else {
-				// Show error notification
-				alert(result.message || 'An error occurred.');
-			}
-		} catch (error) {
-			// Handle network or other errors
-			console.error('Error:', error);
-			alert('Something went wrong. Please try again later.');
-		}
-	});
-});
-
 // Get user data from the token
-async function getUserData(token, refreshToken) {
+async function getUserData(token) {
 	const response = await fetch('/user-data', {
 		method: 'GET',
 		headers: {
-			Authorization: `Bearer ${token ? token : refreshToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 	});
 
@@ -267,11 +226,11 @@ async function getUserData(token, refreshToken) {
 }
 
 // Fetch user's notes
-async function getUserNotes(token, refreshToken) {
+async function getUserNotes(token) {
 	const response = await fetch('/user-notes', {
 		method: 'GET',
 		headers: {
-			Authorization: `Bearer ${token ? token : refreshToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 	});
 
@@ -287,14 +246,17 @@ function getUserNoteById(noteId) {
 
 // Handle Logout
 function checkIfLoggedIn() {
-	const token = localStorage.getItem('token');
-	const refreshToken = localStorage.getItem('refreshToken');
-	if (token || refreshToken) {
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
+
+	if (token) {
 		const signOutBtn = document.querySelector('.header-modal-item.login');
 
 		signOutBtn.textContent = 'Sign Out';
 
 		signOutBtn.addEventListener('click', handleLogout);
+	} else {
+		window.location.href = '/login';
 	}
 }
 
@@ -304,7 +266,8 @@ function handleLogout() {
 }
 
 function checkAndRemoveToken() {
-	const token = localStorage.getItem('token');
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
 	const refreshToken = localStorage.getItem('refreshToken');
 
 	if (token && isTokenExpired(token)) {
@@ -324,20 +287,10 @@ function isTokenExpired(token) {
 	return payload.exp < now;
 }
 
-// Save note listener
-const saveButton = document.querySelector('.fa-floppy-disk');
-
-saveButton.addEventListener('click', () => {
-	const noteTitle = document.querySelector('.note-title');
-
-	if (!noteTitle.value) return window.alert('Please enter a title.');
-
-	saveNote(currentNoteDisplayed);
-});
-
 // Save note
 async function saveNote(note) {
-	const token = localStorage.getItem('token');
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
 	const noteTitleForm = document.querySelector('.note-title');
 	const noteSubtitleForm = document.querySelector('.note-subtitle');
 	const noteContentForm = document.querySelector('.note-content');
@@ -350,7 +303,7 @@ async function saveNote(note) {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token ? token : refreshToken}`,
+					Authorization: `Bearer ${token}`,
 				},
 				body: JSON.stringify({
 					noteId: note._id,
@@ -385,13 +338,10 @@ async function saveNote(note) {
 	}
 }
 
-// Add note listener
-const addNoteBtn = document.querySelector('.add-note');
-addNoteBtn.addEventListener('click', createNote);
-
 // Create Note
 async function createNote(note) {
-	const token = localStorage.getItem('token');
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
 
 	let noteTitle = 'Untitled';
 	let noteSubtitle = '';
@@ -408,7 +358,7 @@ async function createNote(note) {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token ? token : refreshToken}`,
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({
 				title: noteTitle,
@@ -432,13 +382,14 @@ async function createNote(note) {
 
 // Delete Note
 async function deleteNote(note) {
-	const token = localStorage.getItem('token');
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
 	try {
 		const response = await fetch('/delete-note', {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token ? token : refreshToken}`,
+				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify({
 				noteId: note._id,

@@ -34,34 +34,37 @@ mongoose.connection.once('open', () => {
 	console.log('Connected to MongoDB:', mongoose.connection.name);
 });
 
-let tokenStored = null;
-let refreshTokenStored = null;
-
 // Middleware to verify JWT
 async function authenticateToken(req, res, next) {
-	console.log(tokenStored, refreshTokenStored);
-
-	const authHeader = req.headers['authorization'];
+	// Extract the Authorization header
+	const authHeader = req.headers.authorization;
 	if (!authHeader) {
 		return res
 			.status(401)
 			.json({ message: 'Unauthorized: Missing Authorization header' });
 	}
 
-	const token = req.headers['authorization'];
-	if (!token) return res.status(401).json({ message: 'Unauthorized' });
+	// Extract the token from 'Bearer <token>'
+	const token = authHeader.split(' ')[1];
+	if (!token) {
+		return res.status(401).json({ message: 'Unauthorized: Malformed token' });
+	}
 
 	try {
-		const decodedToken = jwt.verify(
-			token.split(' ')[1],
-			tokenStored ? process.env.JWT_SECRET : process.env.JWT_REFRESH_SECRET
-		);
-		req.user = decodedToken;
+		let decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-		next();
+		req.user = decodedToken;
 	} catch (error) {
-		return res.status(401).json({ message: 'Unauthorized' });
+		try {
+			const decodedToken = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+
+			req.user = decodedToken;
+		} catch (refreshError) {
+			return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+		}
 	}
+
+	next();
 }
 
 // Fetch user data from MongoDB
