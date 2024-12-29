@@ -230,7 +230,7 @@ app.get('/login', async (req, res) => {
 	res.sendFile(__dirname + '/public/login.html');
 });
 
-// Create Account route
+// Create Account
 app.post('/create-account', async (req, res) => {
 	const { username, email, password, password2 } = req.body;
 
@@ -255,9 +255,10 @@ app.post('/create-account', async (req, res) => {
 
 	try {
 		await user.save();
-		res.redirect('/login?message=Registration Successful');
+		res.status(201).json({ message: 'Registration successful' });
 	} catch (error) {
-		return res.status(500).json({ message: 'Error creating user', error });
+		console.error('Error creating user:', error);
+		res.status(500).json({ message: 'Error creating user', error });
 	}
 });
 
