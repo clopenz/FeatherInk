@@ -21,15 +21,6 @@ li {
 	list-style: none;
 }
 
-/* Header */
-.header {
-	display: flex;
-	justify-content: space-between;
-	background: linear-gradient(135deg, #fff09a, #ffd6a5);
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	padding: 8px 20px 8px 20px;
-}
-
 .logo {
 	img {
 		width: 150px;

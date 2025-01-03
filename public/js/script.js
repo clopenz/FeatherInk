@@ -146,25 +146,34 @@ function setActiveTab(tab) {
 // Close tab
 function closeTab(tab) {
 	const tabsItems = document.querySelector('.tabs-items');
-	tabsItems.removeChild(tab);
+	let tabElement;
 
-	const wasActive = tab.classList.contains('active');
+	if (typeof tab === 'string') {
+		tabElement = document.querySelector(`[data-id="${tab}"]`);
+	} else {
+		tabElement = document.querySelector(`[data-id="${tab.dataset.id}"]`);
+	}
 
-	if (wasActive) {
-		const firstTab = [...tabsItems.children][0];
-		if (firstTab) {
-			setActiveTab(firstTab);
-			const firstNote = getUserNoteById(firstTab.dataset.id);
+	if (tabElement) {
+		const wasActive = tabElement.classList.contains('active');
+		tabElement.remove();
 
-			displayNoteonMainContent(firstNote);
-		} else {
-			const emptyNote = {
-				title: '',
-				subtitle: '',
-				content: '',
-			};
+		if (wasActive) {
+			const firstTab = [...tabsItems.children][0];
+			if (firstTab) {
+				setActiveTab(firstTab);
+				const firstNote = getUserNoteById(firstTab.dataset.id);
 
-			displayNoteonMainContent(emptyNote);
+				displayNoteonMainContent(firstNote);
+			} else {
+				const emptyNote = {
+					title: '',
+					subtitle: '',
+					content: '',
+				};
+
+				displayNoteonMainContent(emptyNote);
+			}
 		}
 	}
 }
@@ -398,7 +407,8 @@ async function deleteNote(note) {
 
 		if (response.ok) {
 			await displayUserNotes();
-			await closeTab(activeTab);
+
+			await closeTab(note._id);
 		} else {
 			console.error('Failed to create note:', response.statusText);
 		}
