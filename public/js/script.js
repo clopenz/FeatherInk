@@ -3,7 +3,10 @@ let currentNoteDisplayed = {};
 let activeTab = null;
 
 // Check and remove token
-window.onload = () => checkAndRemoveToken();
+window.onload = () => {
+	checkAndRemoveToken();
+	setDarkMode();
+};
 
 // Display user data on main page
 if (window.location.pathname === '/') {
@@ -414,5 +417,32 @@ async function deleteNote(note) {
 		}
 	} catch (error) {
 		console.error('Failed to delete note:', error);
+	}
+}
+
+// Dark Mode
+const darkModeToggle = document.querySelector(
+	'.header-modal-item.dark-mode-btn'
+);
+
+darkModeToggle.addEventListener('click', () => {
+	toggleDarkMode();
+});
+
+function toggleDarkMode() {
+	document.body.classList.toggle('dark-mode');
+	if (document.body.classList.contains('dark-mode')) {
+		darkModeToggle.textContent = 'Light Mode';
+		localStorage.setItem('darkMode', 'true');
+	} else {
+		darkModeToggle.textContent = 'Dark Mode';
+		localStorage.removeItem('darkMode');
+	}
+}
+
+function setDarkMode() {
+	if (localStorage.getItem('darkMode') === 'true') {
+		document.body.classList.add('dark-mode');
+		darkModeToggle.textContent = 'Light Mode';
 	}
 }
