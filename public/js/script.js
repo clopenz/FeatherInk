@@ -216,10 +216,10 @@ async function handleLogin(e) {
 
 			window.location.href = '/';
 		} else {
-			console.error('Failed to login:', result.message);
+			alert('Invalid credentials');
 		}
 	} catch (error) {
-		console.error('Failed to login:', error);
+		alert('Invalid credentials');
 	}
 }
 
@@ -417,6 +417,43 @@ async function deleteNote(note) {
 		}
 	} catch (error) {
 		console.error('Failed to delete note:', error);
+	}
+}
+
+// Download Button Listener
+const downloadButton = document.querySelector('.download-notes-btn');
+downloadButton.addEventListener('click', downloadNotes);
+
+// Download Notes
+async function downloadNotes() {
+	const token =
+		localStorage.getItem('token') || localStorage.getItem('refreshToken');
+	try {
+		const response = await fetch('/download-notes', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+
+		if (response.ok) {
+			const blob = await response.blob();
+			const url = URL.createObjectURL(blob);
+
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'notes.json';
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
+			document.body.removeChild(a);
+		} else {
+			const errorData = await response.json();
+			alert(`Failed to download notes: ${errorData.message}`);
+		}
+	} catch (error) {
+		console.error('Error Downloading Notes:', error);
+		alert('An error occurred while downloading notes.');
 	}
 }
 

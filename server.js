@@ -266,6 +266,43 @@ app.get('/create-account', async (req, res) => {
 	return res.sendFile(__dirname + '/public/create-account.html');
 });
 
+// Download Notes
+app.get('/download-notes', authenticateToken, async (req, res) => {
+	try {
+		const userId = req.user.id;
+		const userName = req.user.username;
+		const user = await User.findById(userId);
+
+		if (!user) return res.status(404).json({ message: 'User not found' });
+
+		const notes = await Note.find({ userId });
+
+		if (!notes || !notes.length) {
+			return res.status(404).json({ message: 'No notes found for this user' });
+		}
+
+		//Convert notes into JSON format for download
+		const fileContent = JSON.stringify(
+			notes.map((note) => ({
+				title: note.title,
+				subtitle: note.subtitle,
+				content: note.content,
+				createdAt: note.createdAt,
+				updatedAt: note.updatedAt,
+			}))
+		);
+
+		// Set hearders for file download
+		const fileName = `notes-${user.name || userId}.json`;
+		res.setHeader('Content-Type', 'application/json');
+		res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+		res.send(fileContent);
+	} catch (error) {
+		console.error('Error downloading notes:', error);
+		res.status(500).json({ message: 'Error downloading notes', error });
+	}
+});
+
 // Start the server
 app.listen(PORT, () => {
 	console.log(`Server is running on http://localhost:${PORT}`);
