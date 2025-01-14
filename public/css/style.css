@@ -41,6 +41,7 @@
 		#fff6e8,
 		#fff3ea
 	);
+	--note-close-btn-bg: #fff3d3;
 	--note-list-item-border: #f1f1f1;
 	--note-list-item-hover: linear-gradient(
 		90deg,
@@ -56,6 +57,8 @@
 		#fff6e8,
 		#ffe0c7
 	);
+	--note-close-btn-color: #363636;
+	--note-close-btn-hover-color: #007bff;
 
 	--placeholder-color: #000;
 	--placeholder-opacity: 0.4;
@@ -103,6 +106,9 @@
 		#2a2a2c,
 		#323236
 	);
+	--note-close-btn-color: #fff;
+	--note-close-btn-hover-color: #007bff;
+
 	--search-bar-bg: #505050;
 	--magnifying-glass-color: #fff;
 	--tools-color: #fff;
@@ -127,6 +133,7 @@
 		#18181b,
 		#151518
 	);
+	--note-close-btn-bg: #151518;
 	--note-list-item-border: #2b2b2b;
 	--note-list-item-hover: linear-gradient(
 		90deg,
@@ -636,18 +643,42 @@ a:visited {
 	}
 }
 
+/* Note Close Btn */
+.note-close-btn {
+	display: none;
+	position: absolute;
+	bottom: 50px;
+	left: 223px;
+	cursor: pointer;
+	color: var(--note-close-btn-color);
+	background: var(--note-close-btn-bg);
+	padding: 7px;
+	z-index: 9999;
+	font-size: 24px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.note-close-btn:hover {
+	color: var(--note-close-btn-hover-color);
+}
+
 /* Media Queries */
 /* Mobile */
 @media (max-width: 768px) {
 	.note-list-wrapper {
-		min-width: 185px;
+		min-width: 225px;
 	}
 
 	.note-list-title {
-		font-size: 14px;
+		font-size: 16px;
 	}
 
 	.note-list-subtitle {
-		font-size: 12px;
+		font-size: 14px;
+	}
+
+	.note-close-btn {
+		display: block;
 	}
 }

@@ -483,3 +483,19 @@ function setDarkMode() {
 		darkModeToggle.textContent = 'Light Mode';
 	}
 }
+
+// Close Note Button
+const closeNoteButton = document.querySelector('.note-close-btn');
+const noteListWrapper = document.querySelector('.note-list-wrapper');
+
+closeNoteButton.addEventListener('click', () => {
+	if (noteListWrapper.style.display === 'none') {
+		noteListWrapper.style.display = 'block';
+		closeNoteButton.style.left = '223px';
+		closeNoteButton.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+	} else {
+		noteListWrapper.style.display = 'none';
+		closeNoteButton.style.left = '0px';
+		closeNoteButton.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+	}
+});
