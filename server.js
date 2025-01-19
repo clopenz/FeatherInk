@@ -67,6 +67,28 @@ async function authenticateToken(req, res, next) {
 	next();
 }
 
+// Search Notes Endpoint
+app.get('/api/search-notes', authenticateToken, async (req, res) => {
+	const query = req.query.query; // Get the 'query' parameter from the request
+
+	if (!query) {
+		return res.status(400).json({ message: 'Query parameter is required' });
+	}
+
+	try {
+		// Search notes using the text index
+		const results = await Note.find(
+			{ $text: { $search: query }, userId: req.user.id },
+			{ score: { $meta: 'textScore' } }
+		).sort({ score: { $meta: 'textScore' } });
+
+		res.status(200).json(results);
+	} catch (error) {
+		console.error('Error searching notes:', error);
+		res.status(500).json({ message: 'Error searching notes', error });
+	}
+});
+
 // Fetch user data from MongoDB
 app.get(
 	'/user-data',

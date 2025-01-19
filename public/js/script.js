@@ -499,3 +499,88 @@ closeNoteButton.addEventListener('click', () => {
 		closeNoteButton.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
 	}
 });
+
+// Search Notes
+const searchInput = document.querySelector('.search-bar input');
+
+searchInput.addEventListener('keydown', async (e) => {
+	if (e.key === 'Enter') {
+		const query = searchInput.value.trim();
+		if (query) {
+			const token =
+				localStorage.getItem('token') || localStorage.getItem('refreshToken');
+
+			try {
+				// Make a GET fetch request to the server's search endpoint
+				const response = await fetch(
+					`/api/search-notes?query=${encodeURIComponent(query)}`,
+					{
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
+
+				if (!response.ok) {
+					throw new Error('Failed to fetch search results');
+				}
+
+				const results = await response.json(); // Parse the JSON response
+
+				// // You can now render the results on your page
+				renderSearchResults(results);
+			} catch (error) {
+				return;
+			}
+		} else {
+			displayUserNotes();
+			return;
+		}
+	}
+});
+
+// Display Search Results
+async function renderSearchResults(results) {
+	const noteListItems = document.querySelector('.note-list-items');
+	noteListItems.innerHTML = '';
+
+	if (results.length === 0) {
+		noteListItems.innerHTML = '<p>No results found</p>';
+		return;
+	}
+
+	results.forEach((note) => {
+		const noteItem = document.createElement('li');
+		noteItem.classList.add('note-list-item');
+
+		const date = new Date(note.updatedAt).toLocaleString('en-US');
+
+		noteItem.innerHTML = `
+						<div class="note-list-title">${note.title}</div>
+						<div class="note-list-subtitle">${note.subtitle}</div>
+						<div class="note-list-date">${date}</div>
+						<div class="delete-note"><i class="fa-solid fa-trash-can"></i>
+						<span class="hover-label delete-label">Delete Note</span>
+						</div>
+					`;
+		noteListItems.appendChild(noteItem);
+
+		// Add click event to delete note
+		const deleteNoteBtn = noteItem.querySelector('.delete-note');
+		deleteNoteBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+
+			if (window.confirm('Are you sure you want to delete this note?'))
+				deleteNote(note);
+			else {
+				return;
+			}
+		});
+
+		// Add click event to create a tab
+		noteItem.addEventListener('click', () => {
+			createTab(note);
+		});
+	});
+}

@@ -74,6 +74,7 @@
 	--footer-bg: linear-gradient(135deg, #f8e681, #f5c386);
 	--social-links-color: #333333;
 	--social-links-hover-color: #555555;
+	--search-text-color: #363636;
 }
 
 /* Dark Mode Variables */
@@ -170,6 +171,7 @@
 	--social-links-color: #eeeeee;
 	--social-links-hover-color: #fff;
 	--copyright-color: #fff;
+	--search-text-color: #fff;
 }
 
 /* Scrollbar */
@@ -407,6 +409,7 @@ a:visited {
 	background: var(--search-bar-bg);
 	padding-left: 35px;
 	font-size: 14px;
+	color: var(--search-text-color);
 }
 
 .fa-magnifying-glass {

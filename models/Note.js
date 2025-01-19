@@ -9,4 +9,7 @@ const noteSchema = new mongoose.Schema({
 	userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
+// Add a text index for full-text search
+noteSchema.index({ title: 'text', content: 'text', subtitle: 'text' });
+
 module.exports = mongoose.model('Note', noteSchema);
