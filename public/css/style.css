@@ -75,6 +75,8 @@
 	--social-links-color: #333333;
 	--social-links-hover-color: #555555;
 	--search-text-color: #363636;
+	--search-placeholder-color: #363636;
+	--no-results-color: #363636;
 }
 
 /* Dark Mode Variables */
@@ -172,6 +174,8 @@
 	--social-links-hover-color: #fff;
 	--copyright-color: #fff;
 	--search-text-color: #fff;
+	--search-placeholder-color: #eee;
+	--no-results-color: #fff;
 }
 
 /* Scrollbar */
@@ -408,8 +412,14 @@ a:visited {
 	border-radius: 20px;
 	background: var(--search-bar-bg);
 	padding-left: 35px;
+	padding-right: 25px;
 	font-size: 14px;
 	color: var(--search-text-color);
+}
+
+.search-bar input::placeholder {
+	color: var(--search-placeholder-color);
+	opacity: 0.6;
 }
 
 .fa-magnifying-glass {
@@ -419,6 +429,22 @@ a:visited {
 	transform: translateY(-50%);
 	color: var(--magnifying-glass-color);
 	font-size: 16px;
+}
+
+.search-fa.fa-solid.fa-xmark {
+	position: absolute;
+	display: none;
+	right: 10px;
+	top: 50%;
+
+	transform: translateY(-50%);
+	color: var(--magnifying-glass-color);
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.search-fa.fa-solid.fa-xmark:hover {
+	color: #007bff;
 }
 
 .fa-arrow-down-wide-short,
@@ -504,6 +530,7 @@ a:visited {
 }
 
 .note-list-items {
+	position: relative;
 	overflow-y: auto;
 	width: 100%;
 
@@ -675,6 +702,18 @@ a:visited {
 .note-close-btn:hover {
 	color: var(--note-close-btn-hover-color);
 	opacity: 1;
+}
+
+/* No Results */
+.no-results {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--no-results-color);
+	z-index: 9999;
 }
 
 /* Media Queries */

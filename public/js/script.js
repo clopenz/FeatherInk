@@ -503,6 +503,15 @@ closeNoteButton.addEventListener('click', () => {
 // Search Notes
 const searchInput = document.querySelector('.search-bar input');
 
+// Search Notes X Button
+const searchInputClear = document.querySelector('.search-fa.fa-solid.fa-xmark');
+
+searchInputClear.addEventListener('click', () => {
+	searchInput.value = '';
+	displayUserNotes();
+	searchInputClear.style.display = 'none';
+});
+
 searchInput.addEventListener('keydown', async (e) => {
 	if (e.key === 'Enter') {
 		const query = searchInput.value.trim();
@@ -538,6 +547,12 @@ searchInput.addEventListener('keydown', async (e) => {
 			return;
 		}
 	}
+
+	if (searchInput.value === '') {
+		searchInputClear.style.display = 'none';
+	} else {
+		searchInputClear.style.display = 'block';
+	}
 });
 
 // Display Search Results
@@ -546,7 +561,7 @@ async function renderSearchResults(results) {
 	noteListItems.innerHTML = '';
 
 	if (results.length === 0) {
-		noteListItems.innerHTML = '<p>No results found</p>';
+		noteListItems.innerHTML = '<p class="no-results">No results found</p>';
 		return;
 	}
 
