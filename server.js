@@ -19,7 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 mongoose
-	.connect(process.env.MONGODB_URI)
+	.connect(process.env.MONGODB_URI, {
+		autoIndex: true,
+	})
 	.then(() => console.log('Connected to MongoDB'))
 	.catch((err) => console.log('MongoDB connection error:', err));
 
@@ -123,7 +125,7 @@ app.get(
 		try {
 			const userId = req.user.id; // Extract user ID from decoded JWT payload
 
-			const notes = await Note.find({ userId });
+			const notes = await Note.find({ userId }).sort({ updatedAt: -1 });
 
 			if (!notes || notes.length === 0) {
 				return res

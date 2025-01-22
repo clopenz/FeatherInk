@@ -12,4 +12,7 @@ const noteSchema = new mongoose.Schema({
 // Add a text index for full-text search
 noteSchema.index({ title: 'text', content: 'text', subtitle: 'text' });
 
+// Add an index for sorting by updated date
+noteSchema.index({ updatedAt: -1 });
+
 module.exports = mongoose.model('Note', noteSchema);
